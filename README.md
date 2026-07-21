@@ -1,6 +1,6 @@
 # Local LLMs, Vibe Coding & Prompting
 
-A summarizer project using that calls a local model through OpenAI-compatible API.
+A summarizer project that calls a local model through OpenAI-compatible API.
 
 ## Project Files
 
@@ -10,7 +10,7 @@ A summarizer project using that calls a local model through OpenAI-compatible AP
 
 **Example.txt** Is a example to use on the summarizer.
 
-**Prompts** Shows some prompts I used with opencode.
+**Prompts.txt** Shows some prompts I used with opencode.
 
 ## Report
 
