@@ -1,0 +1,161 @@
+Not all prompts are included.
+
+return self._post(
+           ~~~~~~~~~~^
+        "/chat/completions",
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<53 lines>...
+        stream_cls=Stream[ChatCompletionChunk],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\onene\AppData\Roaming\Python\Python314\site-packages\openai\_base_client.py", line 1332, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\onene\AppData\Roaming\Python\Python314\site-packages\openai\_base_client.py", line 1105, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.BadRequestError: <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>400 Bad Request</title>
+</head><body>
+<h1>Bad Request</h1>
+<p>Your browser sent a request that this server could not understand.<br />
+Reason: You're speaking plain HTTP to an SSL-enabled server port.<br />
+ Instead use the HTTPS scheme to access this URL, please.<br />
+</p>
+</body></html> import json
+from openai import OpenAI
+
+OLLAMA_HOST = "https://127.0.0.1:11434"
+MODEL_NAME = "qwen2.5-coder:7b"
+
+client = OpenAI(base_url="https://localhost:8000/v1", api_key="EMPTY")
+
+def chat(message:str, temperature:float=0.7)->str:
+    resp = client.chat.completions.create(
+            model=MODEL_NAME,
+            messages=message,
+            temperature= temperature,
+            max_tokens= 400)
+    return resp.choices[0].message.content
+
+
+def build_prompt(text: str, type: str) -> list:
+    if type == "bullets":
+        instruction = (
+            "Summarize the given text as bullet points."
+            "Only include information from the given text."
+        )
+    elif type=="paragraph":
+        instruction = (
+            "Summarize the given text as a paragraph "
+            "(3-5 sentences). Only include information present in the text."
+        )
+
+    return [
+        {"role": "system", "content": "You are a precise, concise summarization assistant."},
+        {"role": "user", "content": f"{instruction}\n\nTEXT:\n{text}"},
+    ]
+
+print(chat(message="hello")) how could I fix this error
+{"name":"question","arguments":{"questions":[{"header":"Error Explanation","options":[{"label":"Network Error (400 Bad Request)","description":"The server could not understand the request due to an invalid HTTP scheme."},{"label":"Incorrect API Key","description":"The provided API key is either missing or incorrect."}]},{header":"Resolution Steps","options":[{"label":"Correct the URL Scheme","description":"Use HTTPS instead of HTTP for the API endpoint."},{"label":"Check API Key","description":"Verify that the API key is valid and not empty."}]}]}]
+▣  Build · qwen2.5-coder:7b · 10m 2s
+Traceback (most recent call last):
+  File "c:\Users\onene\OneDrive\Documents\InMind\InMind Academy\Day5\Homework\summarizer.py", line 35, in <module>
+    print(chat(message="hello"))
+          ~~~~^^^^^^^^^^^^^^^^^
+  File "c:\Users\onene\OneDrive\Documents\InMind\InMind Academy\Day5\Homework\summarizer.py", line 10, in chat
+    resp = client.chat.completions.create(
+            model=MODEL_NAME,
+            messages=message,
+            temperature= temperature,
+            max_tokens= 400)
+  File "C:\Users\onene\AppData\Roaming\Python\Python314\site-packages\openai\_utils\_utils.py", line 298, in wrapper
+    return func(*args, **kwargs)
+  File "C:\Users\onene\AppData\Roaming\Python\Python314\site-packages\openai\resources\chat\completions\completions.py", line 1281, in create
+    return self._post(
+           ~~~~~~~~~~^
+        "/chat/completions",
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<53 lines>...
+        stream_cls=Stream[ChatCompletionChunk],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\onene\AppData\Roaming\Python\Python314\site-packages\openai\_base_client.py", line 1332, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\onene\AppData\Roaming\Python\Python314\site-packages\openai\_base_client.py", line 1105, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.BadRequestError: Error code: 400 - {'error': {'message': 'json: cannot unmarshal string into Go struct field ChatCompletionRequest.messages of type []openai.Message', 'type': 'invalid_request_error', 'param': None, 'code': None}} def chat(message:str, temperature:float=0.7)->str: #basicaly from the cours
+    resp = client.chat.completions.create(
+            model=MODEL_NAME,
+            messages=message,
+            temperature= temperature,
+            max_tokens= 400)
+    return resp.choices[0].message.content explain this error
+{"name":"question","arguments":{"questions":[{"header":"Error Explanation","options":[{"label":"Incorrect Data Type for 'messages' Parameter","description":"'messages' should be a list of messages, not a single string."}]}]}}
+▣  Build · qwen2.5-coder:7b · 1m 13s
+I want to make a message for a few shots tasks what prompt template should I use, the task is to classify a review as good or bad
+To create a prompt for classifying reviews as good or bad, you can follow a simple and clear format. Here’s an example prompt that works well:
+### Classification Prompt:
+**Task:** Classify the sentiment of the following review as either "Good" or "Bad".
+
+**Instructions:**
+- Read the review carefully.
+- Determine if the customer was satisfied based on the content of the review.
+
+**Review:** (Insert Review Text Here)
+This template is straightforward and ensures that each review is evaluated for its sentiment in a consistent manner. 
+Would you like to proceed with this prompt, or do you need further assistance?
+▣  Build · qwen2.5-coder:7b · 10m 33s
+I want a prompt in the template that is used for client.chat.completions.creat
+Certainly! Here’s a refined template designed for use in OpenAI's client.chat.completions.create method:
+{
+    "prompt": "Classify the sentiment of the following review as either 'Good' or 'Bad'. Follow these instructions carefully: Read the review thoroughly, and based on its content, judge whether the customer was satisfied. Only provide the word 'Good' or 'Bad' as your answer."
+}
+You can then pass this prompt to the chat function:
+import json
+from openai import OpenAI
+
+OLLAMA_HOST = "https://127.0.0.1:11434"
+MODEL_NAME = "qwen2.5-coder:7b"
+
+client = OpenAI(base_url="https://localhost:8000/v1", api_key="EMPTY")
+
+def chat(message:str, temperature:float=0.7)->str:
+    resp = client.chat.completions.create(
+        model=MODEL_NAME,
+        messages=[
+            {"role": "system", "content": "You are a precise sentiment classifier."},
+            {"role": "user", "content": message}
+        ],
+        temperature=temperature,
+        max_tokens=20
+    )
+    return resp.choices[0].message.content
+
+# Example usage:
+review = """
+I purchased this product and it was terrible. The quality is really low and it doesn't work properly.
+"""
+print(chat(message=json.dumps({"prompt": review})))
+In this example, the messages parameter uses two JSON objects:
+1. 
+2. 
+This should be effective for classifying review sentiments using the OpenAI API.
+▣  Build · qwen2.5-coder:7b · 3m 25s
+**Structured output:** get the model to reliably return valid JSON for a small task (e.g. {"name": ..., "age": ...})
+Certainly! To ensure the model returns valid JSON for small tasks, you can structure your prompt accordingly. Here’s an example of how you might set it up:
+"""
+### Task Instructions:
+**Task:** Classify the sentiment of a product review as either "Good" or "Bad".
+
+**Instructions:**
+- Read the review carefully.
+- Determine if the customer was satisfied based on the content of the review.
+- Return your response in valid JSON format. Specifically, use the following structure:
+  ```json
+  {
+    "sentiment": "<Good|Bad>"
+  }
